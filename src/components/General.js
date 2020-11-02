@@ -1,85 +1,75 @@
-import React, {Component} from "react";
+import React, {useState} from "react";
 
-class General extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            name: "",
-            email: "",
-            phoneNumber: "",
-            submitted: false,
-        };
+function General() {
+    const [name, setName] = useState(null);
+    const [email, setEmail] = useState(null);
+    const [phoneNumber, setPhoneNumber] = useState(null);
+    const [submitStatus, setSubmitStatus] = useState(false);
+    function handleNameChange(e){
+        setName(e.target.value);
     }
-    changeSubmittedStatus = () => {
-        this.setState({
-            submitted: !this.state.submitted,
-        });
-    };
 
-    handleNameChange = (e) => {
-        this.setState({
-            name: e.target.value,
-        });
-    };
+    function handleEmailChange(e) {
+        setEmail(e.target.value);
+    }
 
-    handleEmailChange = (e) => {
-        this.setState({
-            email: e.target.value,
-        });
-    };
+    function handlePhoneNumberChange(e) {
+        setPhoneNumber(e.target.value);
+    }
 
-    handlePhoneNumberChange = (e) => {
-        this.setState({
-            phoneNumber: e.target.value,
-        });
-    };
-
-    handleEdit = (e) => {
-        this.changeSubmittedStatus();
-    };
-
-    onSubmitGeneralInfo = (e) => {
+    function changeSubmitStatus(e) {
         e.preventDefault();
-        this.setState({
-            submitted: true,
-        });
-    };
-
-    render() {
-        const {name, email, phoneNumber} = this.state;
-        
-        if (this.state.submitted) {
-            return (
-                <div>
-                    <ul>
-                        <li>{name}</li>
-                        <li>{email}</li>
-                        <li>{phoneNumber}</li>
-                    </ul>
-                    <button onClick={this.handleEdit}>Edit</button>
-                </div>
-            )
-        } else {
-            return (
-                <div>
-                    <form onSubmit={this.onSubmitGeneralInfo}>
-                        <label htmlFor="name">Name</label><br/>
-                        <input onChange={this.handleNameChange} type="text" id={"name"}/> <br/>
-
-                        <label  htmlFor="email">Email</label><br/>
-                        <input onChange={this.handleEmailChange} type="email" id={"email"}/><br/>
-
-                        <label htmlFor="phone-number">Phone Number</label><br/>
-                        <input onChange={this.handlePhoneNumberChange} type="number" id={"phone-number"}/><br/>
-
-                        <button type={"submit"}>Submit</button>
-                        <button onClick={this.handleEdit}>Edit</button>
-                    </form>
-                </div>
-            )
-        }
+        setSubmitStatus(!submitStatus);
     }
+
+
+    function displayGeneralInfo() {
+        return (
+            <ul>
+                <li>{name}</li>
+                <li>{email}</li>
+                <li>{phoneNumber}</li> <br/>
+                <button onClick={changeSubmitStatus}>Edit</button>
+            </ul>
+        );
+    }
+
+    function displayGeneralInfoForm() {
+        return (
+            <form onSubmit={changeSubmitStatus}>
+                <label htmlFor="name">Name:</label> <br/>
+                <input
+                    value={name}
+                    id={"name"}
+                    onChange={handleNameChange}
+                />
+                <br/>
+
+                <label htmlFor="email">Email:</label> <br/>
+                <input
+                    value={email}
+                    id={"email"}
+                    onChange={handleEmailChange}
+                />
+                <br/>
+
+                <label htmlFor="phoneNumber">Phone Number</label> <br/>
+                <input
+                    value={phoneNumber}
+                    id={"phoneNumber"}
+                    onChange={handlePhoneNumberChange}
+                />
+                <br/><br/>
+
+                <button type={"submit"}>Submit</button>
+            </form>
+        );
+    }
+    return (
+        <div className={"general"}>
+            {submitStatus ? displayGeneralInfo() : displayGeneralInfoForm()}
+        </div>
+    )
 }
 
 export default General;
